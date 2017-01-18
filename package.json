@@ -1,0 +1,30 @@
+{
+  "name": "polling",
+  "version": "1.0.0",
+  "description": "An application that creates live polling using socket.io",
+  "main": "app-server.js",
+  "dependencies": {
+    "babel-core": "^6.21.0",
+    "babel-loader": "^6.2.10",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-react": "^6.16.0",
+    "bootstrap": "^3.3.7",
+    "express": "^4.14.0",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThienDinh/Polling.git"
+  },
+  "author": "Thien Dinh",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ThienDinh/Polling/issues"
+  },
+  "homepage": "https://github.com/ThienDinh/Polling#readme"
+}
