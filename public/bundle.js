@@ -4125,12 +4125,17 @@
 		},
 		componentWillMount: function componentWillMount() {
 			this.socket = io('http://localhost:3000');
-			alert('here!');
 			this.socket.on('connect', this.connect);
+			this.socket.on('disconnect', this.disconnect);
 		},
 		connect: function connect() {
 			this.setState({
 				status: 'connected'
+			});
+		},
+		disconnect: function disconnect() {
+			this.setState({
+				status: 'disconnected'
 			});
 		},
 		render: function render() {

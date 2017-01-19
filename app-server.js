@@ -2,6 +2,8 @@ var express = require('express');
 
 var app = express();
 
+var connections = [];
+
 app.use(express.static('./public'));
 app.use(express.static('./node_modules/bootstrap/dist'));
 
@@ -10,7 +12,16 @@ var io = require('socket.io').listen(server);
 
 // Add an event listener.
 io.sockets.on('connection', function(socket) {
-	console.log('Connected: ' + socket.id)
+
+	socket.once('disconnect', function(){
+		// Notice that this function is defined even before the push statement.
+		connections.splice(connections.indexOf(socket), 1);
+		socket.disconnect();
+		console.log('Disconnected: ' + connections.length + ' sockets remaining.');
+	});
+
+	connections.push(socket);
+	console.log('Connected: ' + connections.length + ' sockets connected.');
 })
 
 console.log("Polling server is running at localhost:3000");
