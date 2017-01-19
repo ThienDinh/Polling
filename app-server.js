@@ -1,5 +1,5 @@
 var express = require('express');
-
+var _ = require('underscore');
 var app = express();
 
 var connections = [];
@@ -15,7 +15,20 @@ var io = require('socket.io').listen(server);
 // Add an event listener.
 io.sockets.on('connection', function(socket) {
 
+	// Handle socket disconnection.
 	socket.once('disconnect', function(){
+		// this refers to the socket that has just disconnected.
+		var member = _.findWhere(audience, {id: this.id});
+
+		if (member) {
+			audience.splice(audience.indexOf(member), 1);
+			// Send an update of participating audience to all
+			// remaining audience.
+			io.sockets.emit('audience', audience);
+			console.log('Left: ' + member.name + ' (' + audience.length +
+				' remaining audience members)');
+		}
+
 		// Notice that this function is defined even before the push statement.
 		connections.splice(connections.indexOf(socket), 1);
 		socket.disconnect();
