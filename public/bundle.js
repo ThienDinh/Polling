@@ -75,6 +75,7 @@
 		)
 	);
 
+	// Render all the routes.
 	ReactDOM.render(routes, document.getElementById('react-container'));
 
 /***/ },
@@ -35217,6 +35218,8 @@
 	var Router = __webpack_require__(1);
 	var Link = Router.Link;
 
+	// Whoops404 component will be displayed when the user
+	// access routes that are not defined.
 	var Whoops404 = React.createClass({
 		displayName: 'Whoops404',
 		render: function render() {
@@ -35393,6 +35396,7 @@
 	var Display = __webpack_require__(289);
 	var JoinSpeaker = __webpack_require__(292);
 
+	// Speaker component 
 	var Speaker = React.createClass({
 		displayName: 'Speaker',
 		render: function render() {

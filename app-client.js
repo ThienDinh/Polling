@@ -23,4 +23,5 @@ var routes = (
 	</Router>
 );
 
+// Render all the routes.
 ReactDOM.render(routes, document.getElementById('react-container'));

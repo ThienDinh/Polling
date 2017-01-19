@@ -2,6 +2,7 @@ var React = require('react');
 var Display = require('./parts/Display');
 var JoinSpeaker = require('./parts/JoinSpeaker');
 
+// Speaker component displays speaker 
 var Speaker = React.createClass({
 	render() {
 		return (
