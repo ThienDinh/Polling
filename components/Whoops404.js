@@ -1,10 +1,9 @@
-var React = require('react');
-var Router = require('react-router');
-var Link = Router.Link;
+import React from 'react'
+import {Router, Link} from 'react-router'
 
 // Whoops404 component will be displayed when the user
 // access routes that are not defined.
-var Whoops404 = React.createClass({
+class Whoops404 extends React.Component{
 	render() {
 		return (
 			<div id='not-found'>
@@ -17,6 +16,6 @@ var Whoops404 = React.createClass({
 			</div>
 		)
 	}
-});
+}
 
 module.exports = Whoops404;

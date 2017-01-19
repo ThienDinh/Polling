@@ -1,7 +1,7 @@
-var React = require('react');
-var Display = require('./parts/Display');
+import React from 'react'
+import Display from './parts/Display'
 
-var Board = React.createClass({
+class Board extends React.Component{
 	render() {
 		return (
 			<div id='scoreboard'>
@@ -18,6 +18,6 @@ var Board = React.createClass({
 			</div>
 			);
 	}
-});
+}
 
 module.exports = Board;

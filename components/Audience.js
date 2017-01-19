@@ -1,9 +1,9 @@
-var React = require('react');
-var Display = require('./parts/Display');
-var Join = require('./parts/Join');
-var Ask = require('./parts/Ask');
+import React from 'react'
+import Display from './parts/Display'
+import Join from'./parts/Join'
+import Ask from './parts/Ask'
 
-var Audience = React.createClass({
+class Audience extends React.Component{
 	render() {
 		return (
 			<div>
@@ -30,6 +30,6 @@ var Audience = React.createClass({
 			</div>
 		);
 	}
-});
+}
 
 module.exports = Audience;
