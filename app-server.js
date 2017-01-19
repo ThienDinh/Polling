@@ -9,6 +9,17 @@ var title = 'Untitled Presentation';
 var audience = [];
 // There is only one speaker.
 var speaker = {};
+// Get the questions.
+var questions = require('./app-questions');
+// Current question being ask;
+var currentQuestion = false;
+// Results from all the audience.
+var results = {
+	a: 0,
+	b: 0,
+	c: 0,
+	d: 0	
+};
 
 // Serve the compiled React with JSX and ES6, also bootstrap.
 app.use(express.static('./public'));
@@ -64,7 +75,7 @@ io.sockets.on('connection', function(socket) {
 		var newMember = {
 			id: this.id,
 			name: payload.name,
-			type: 'member'
+			type: 'audience'
 		}
 		// Emit the event 'joined', indicating that the member has joined successfully, to this connecting socket.
 		this.emit('joined', newMember);
@@ -98,12 +109,33 @@ io.sockets.on('connection', function(socket) {
 		});
 		console.log('Presentation Started: ' + title + ' by ' + speaker.name);
 	});
+	// Called when client socket emit the event 'ask'
+	socket.on('ask', function(question) {
+		currentQuestion = question;
+		// Reset results of the old question.
+		results = {
+			a: 0, b: 0, c:0, d:0
+		}
+		io.sockets.emit('ask', currentQuestion);
+		console.log('Question Asked: ' + question.q);
+	});
+
+	// This handler is invoked when an audience answers the question.
+	socket.on('answer', function(payload){
+		results[payload.choice]++;
+		// Broadcast to all sockets once an audience answers the question.
+		io.sockets.emit('results', results);
+		console.log('Answer: ' + payload.choice + ' - ' + JSON.stringify(results));
+	});
 
 	// Emit the event 'welcome' after the socket connection has been established between the server and the client.
 	socket.emit('welcome', {
 		title: title,
 		audience: audience,
-		speaker: speaker.name
+		speaker: speaker.name,
+		questions: questions,
+		currentQuestion: currentQuestion,
+		results: results
 	});
 	// Add the new socket into the sockets list.
 	connections.push(socket);
