@@ -13,7 +13,10 @@ var App = React.createClass({
 			title: '',
 			member: {},
 			audience: [],
-			speaker: ''
+			speaker: '',
+			questions: [],
+			currentQuestion: false,
+			results: {}
 		}
 	},
 	// Before mounting the component, check for
@@ -28,6 +31,8 @@ var App = React.createClass({
 		this.socket.on('audience', this.updateAudience);
 		this.socket.on('start', this.start);
 		this.socket.on('end', this.updateState);
+		this.socket.on('ask', this.ask);
+		this.socket.on('results', this.updateResults);
 	},
 	// This method is defined to be used by App's children.
 	emit(eventName, payload) {
@@ -89,6 +94,18 @@ var App = React.createClass({
 	// This handler is called when the audience list has been updated, which is emitted by the server.
 	updateAudience(newAudience) {
 		this.setState({audience: newAudience});
+	},
+	// This handler is invoked when the server emits the event 'ask',
+	// indicating that the speaker has asked a question.
+	ask(question){
+		sessionStorage.answer= '';
+		this.setState({
+			currentQuestion: question
+		});
+	},
+
+	updateResults(data){
+		this.setState({results: data});
 	},
 	// Render the App component and its appropriate children.
 	render() {
