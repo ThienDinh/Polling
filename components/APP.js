@@ -8,7 +8,8 @@ var App = React.createClass({
 		return {
 			status: 'disconnected',
 			title: '',
-			dance: 'yes please'
+			member: {},
+			audience: []
 		}
 	},
 	
@@ -17,6 +18,13 @@ var App = React.createClass({
 		this.socket.on('connect', this.connect);
 		this.socket.on('disconnect', this.disconnect);
 		this.socket.on('welcome', this.welcome);
+		this.socket.on('joined', this.joined);
+		// called when a new audience has joined.
+		this.socket.on('audience', this.updateAudience);
+	},
+
+	emit(eventName, payload) {
+		this.socket.emit(eventName, payload);
 	},
 
 	connect() {
@@ -37,11 +45,21 @@ var App = React.createClass({
 		});
 	},
 
+	joined(member){
+		this.setState({
+			member: member
+		});
+	},
+
+	updateAudience(newAudience) {
+		this.setState({audience: newAudience});
+	},
+
 	render() {
 		return (
 			<div>
 				<Header title={this.state.title} status={this.state.status} />
-				{React.cloneElement(this.props.children, this.state)}
+				{React.cloneElement(this.props.children, {...this.state, emit: this.emit})}
 			</div>
 			);
 	}
