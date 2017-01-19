@@ -6,7 +6,9 @@ var App = React.createClass({
 
 	getInitialState() {
 		return {
-			status: 'disconnected'
+			status: 'disconnected',
+			title: '',
+			dance: 'yes please'
 		}
 	},
 	
@@ -14,6 +16,7 @@ var App = React.createClass({
 		this.socket = io('http://localhost:3000');
 		this.socket.on('connect', this.connect);
 		this.socket.on('disconnect', this.disconnect);
+		this.socket.on('welcome', this.welcome);
 	},
 
 	connect() {
@@ -28,10 +31,17 @@ var App = React.createClass({
 		});
 	},
 
+	welcome(serverState) {
+		this.setState({
+			title: serverState.title
+		});
+	},
+
 	render() {
 		return (
 			<div>
-				<Header title="New Header" status={this.state.status} />
+				<Header title={this.state.title} status={this.state.status} />
+				{React.cloneElement(this.props.children, this.state)}
 			</div>
 			);
 	}
