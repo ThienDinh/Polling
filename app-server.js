@@ -5,6 +5,8 @@ var app = express();
 var connections = [];
 var title = 'Untitled Presentation';
 var audience = [];
+// There is only one speaker.
+var speaker = {};
 
 app.use(express.static('./public'));
 app.use(express.static('./node_modules/bootstrap/dist'));
@@ -27,6 +29,14 @@ io.sockets.on('connection', function(socket) {
 			io.sockets.emit('audience', audience);
 			console.log('Left: ' + member.name + ' (' + audience.length +
 				' remaining audience members)');
+		} else if (this.id === speaker.id) {
+			console.log(speaker.name + ' has left. ' + title + ' is over.');
+			speaker = {};
+			title = 'Untitled Presentation';
+			io.sockets.emit('end', {
+				title: title,
+				speaker: ''
+			});
 		}
 
 		// Notice that this function is defined even before the push statement.
@@ -35,11 +45,13 @@ io.sockets.on('connection', function(socket) {
 		console.log('Disconnected: ' + connections.length + ' sockets remaining.');
 	});
 
+	// Audience join.
 	socket.on('join', function(payload){
 		// this here refers to the parameter 'socket'.
 		var newMember = {
 			id: this.id,
-			name: payload.name
+			name: payload.name,
+			type: 'member'
 		}
 		this.emit('joined', newMember);
 		// Register new member.
@@ -49,9 +61,28 @@ io.sockets.on('connection', function(socket) {
 		console.log('Audience Joined: ', payload.name);
 	});
 
+	// Speaker join.
+	socket.on('start', function(payload) {
+		speaker.name = payload.name;
+		// this <-> socket.
+		speaker.id = this.id;
+		speaker.type = 'speaker';
+		title = payload.title;
+		// the type property differentiates audience and speaker.
+		this.emit('joined', speaker);
+
+		io.sockets.emit('start', {
+			title: title,
+			speaker: speaker.name
+		});
+		console.log('Presentation Started: ' + title + ' by ' + speaker.name);
+	});
+
 	// Emit event that can be handled by the client.
 	socket.emit('welcome', {
-		title: title
+		title: title,
+		audience: audience,
+		speaker: speaker.name
 	});
 
 	connections.push(socket);
