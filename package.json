@@ -11,11 +11,13 @@
     "bootstrap": "^3.3.7",
     "express": "^4.14.0",
     "react": "^15.4.2",
-    "react-dom": "^15.4.2"
+    "react-dom": "^15.4.2",
+    "socket.io": "^1.7.2"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prestart": "webpack",
+    "start": "node app-server.js"
   },
   "repository": {
     "type": "git",
